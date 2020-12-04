@@ -1,24 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css';
 import TodoList from './components/TodoList/TodoList';
 import { withAuthenticator } from '@aws-amplify/ui-react'
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify, { Auth, API, graphqlOperation } from 'aws-amplify';
 import awsconfig from './aws-exports';
+import * as queries from './graphql/queries'
 
 Amplify.configure(awsconfig);
 
 function App() {
+  const [todos, setTodos] = useState([])
 
-  const [todos, setTodos] = useState([
-    { name: 'Eat Breakfast', status: 'NEW' },
-    { name: 'Workout', status: 'NEW' },
-    { name: 'Meditate', status: 'NEW' }
-  ])
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const result = await API.graphql(graphqlOperation(queries.listTodos))
+      setTodos(result.data.listTodos.items)
+    }
+
+    fetchTodos()
+  }, [])
 
   const logout = () => {
     Auth.signOut()
     window.location.reload()
   }
+
+  console.log(todos)
 
   return (
     <div className="App">
