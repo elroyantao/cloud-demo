@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './App.css';
 import TodoList from './components/TodoList/TodoList';
 import { withAuthenticator } from '@aws-amplify/ui-react'
-import Amplify from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
 import awsconfig from './aws-exports';
 
 Amplify.configure(awsconfig);
@@ -15,12 +15,18 @@ function App() {
     { name: 'Meditate', status: 'NEW' }
   ])
 
+  const logout = () => {
+    Auth.signOut()
+    window.location.reload()
+  }
+
   return (
     <div className="App">
       <main>
         <h1>TODO List</h1>
         <TodoList todos={todos} />
       </main>
+      <button onClick={logout}>Log Out</button>
     </div>
   );
 }
