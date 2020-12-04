@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
 import './App.css';
 import TodoList from './components/TodoList/TodoList';
+import { withAuthenticator } from '@aws-amplify/ui-react'
+import Amplify from 'aws-amplify';
+import awsconfig from './aws-exports';
+
+Amplify.configure(awsconfig);
 
 function App() {
 
@@ -20,4 +25,6 @@ function App() {
   );
 }
 
-export default App;
+export default withAuthenticator(App, {
+  usernameAlias: 'email'
+});
