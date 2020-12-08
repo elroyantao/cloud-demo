@@ -3,6 +3,7 @@ import { Segment, Header, Container } from 'semantic-ui-react';
 
 import Amplify from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react';
+import { Auth } from 'aws-amplify'
 
 import Quiz from './components/Quiz';
 import QuizPicker from './components/QuizPicker';
@@ -26,6 +27,10 @@ class App extends React.Component {
 
     setActiveQuiz = (i) => this.setState({activeQuiz: i});
 
+    logout = () => {
+        Auth.signOut()
+    }
+
     render() {
         return (
             <div>
@@ -34,6 +39,7 @@ class App extends React.Component {
                         <Header as='h1' textAlign='center' style={{marginTop: '2em', color: 'white'}}>
                             Welcome to QuizBiz
                         </Header>
+                        <button onClick={this.logout}>logout</button>
                     </Container>
                 </Segment>
                 <Container>
@@ -48,5 +54,7 @@ class App extends React.Component {
     }
 }
 
-export default App;
-//export default withAuthenticator(App);
+// export default App;
+export default withAuthenticator(App, {
+    usernameAlias: 'email'
+});

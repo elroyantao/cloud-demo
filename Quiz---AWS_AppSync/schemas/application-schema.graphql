@@ -14,7 +14,13 @@ type Answer @model @versioned {
   question: Question @connection(name: "QuestionChoices")
 }
 
-type Quiz @model(queries: {list: "listQuizzes", get: "getQuiz"}) @versioned {
+type Quiz @model(queries: {list: "listQuizzes", get: "getQuiz"}) @versioned 
+  @auth (rules: [
+    { allow: groups, groups: ["instructor"] },
+    { allow: groups, groups: ["students"],
+      mutations: [], queries: [get, list]}
+  ])
+{ 
   id: ID!
   title: String!
   questions: [Question] @connection
